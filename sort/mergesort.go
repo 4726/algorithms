@@ -1,25 +1,5 @@
 package sort
 
-// in:  [7 3 8 4 1 5 5]
-// in:  [7 3 8]
-// in:  [7]
-// in:  [3 8]
-// in:  [3]
-// in:  [8]
-// out:  [3 8]
-// out:  [3 7 8]
-// in:  [4 1 5 5]
-// in:  [4 1]
-// in:  [4]
-// in:  [1]
-// out:  [1 4]
-// in:  [5 5]
-// in:  [5]
-// in:  [5]
-// out:  [5 5]
-// out:  [1 4 5 5]
-// out:  [1 3 4 5 5 7 8]
-
 func Mergesort(in []int) {
 	if len(in) <= 1 {
 		return
