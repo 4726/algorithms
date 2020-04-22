@@ -7,6 +7,12 @@ type Graph struct {
 	vertices map[int]map[int]struct{}
 }
 
+func NewGraph() *Graph {
+	return &Graph{
+		vertices: map[int]map[int]struct{}{},
+	}
+}
+
 func (g *Graph) Adjacent(x, y int) bool {
 	edges := g.vertices[x]
 	_, ok := edges[y]
@@ -38,6 +44,13 @@ func (g *Graph) AddEdge(x, y int) {
 		return
 	}
 
+	if g.vertices[x] == nil {
+		g.vertices[x] = map[int]struct{}{}
+	}
+	if g.vertices[y] == nil {
+		g.vertices[y] = map[int]struct{}{}
+	}
+
 	g.vertices[x][y] = struct{}{}
 	g.vertices[y][x] = struct{}{}
 }
@@ -54,4 +67,77 @@ func (g *Graph) RemoveEdge(x, y int) {
 	delete(edges, y)
 	g.vertices[x] = edges
 	g.RemoveEdge(y, x)
+}
+
+func (g *Graph) BreadthFirstSearch(root int) []int {
+	var res []int
+	visited := map[int]struct{}{}
+
+	queue := []int{root}
+	for len(queue) > 0 {
+		if _, ok := visited[queue[0]]; ok {
+			if len(queue) == 1 {
+				queue = []int{}
+			} else {
+				queue = queue[1:]
+			}
+			continue
+		}
+		res = append(res, queue[0])
+		visited[queue[0]] = struct{}{}
+		edges, ok := g.vertices[queue[0]]
+		if !ok {
+			return res
+		}
+
+		if len(queue) == 1 {
+			queue = []int{}
+		} else {
+			queue = queue[1:]
+		}
+
+		for vertex := range edges {
+			if _, ok := visited[vertex]; !ok {
+				queue = append(queue, vertex)
+			}
+		}
+	}
+	return res
+}
+
+func (g *Graph) DepthFirstSearch(root int) []int {
+	var res []int
+	visited := map[int]struct{}{}
+
+	stack := []int{root}
+	for len(stack) > 0 {
+		index := len(stack) - 1
+		if _, ok := visited[stack[index]]; ok {
+			if len(stack) == 1 {
+				stack = []int{}
+			} else {
+				stack = stack[:index]
+			}
+			continue
+		}
+		res = append(res, stack[index])
+		visited[stack[index]] = struct{}{}
+		edges, ok := g.vertices[stack[index]]
+		if !ok {
+			return res
+		}
+
+		if len(stack) == 1 {
+			stack = []int{}
+		} else {
+			stack = stack[:index]
+		}
+
+		for vertex := range edges {
+			if _, ok := visited[vertex]; !ok {
+				stack = append(stack, vertex)
+			}
+		}
+	}
+	return res
 }
