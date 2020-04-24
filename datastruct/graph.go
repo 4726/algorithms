@@ -44,13 +44,6 @@ func (g *Graph) AddEdge(x, y int) {
 		return
 	}
 
-	if g.vertices[x] == nil {
-		g.vertices[x] = map[int]struct{}{}
-	}
-	if g.vertices[y] == nil {
-		g.vertices[y] = map[int]struct{}{}
-	}
-
 	g.vertices[x][y] = struct{}{}
 	g.vertices[y][x] = struct{}{}
 }
