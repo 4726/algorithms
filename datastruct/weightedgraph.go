@@ -54,10 +54,9 @@ func (g *WeightedGraph) RemoveEdge(x, y int) {
 	g.RemoveEdge(y, x)
 }
 
-func (g *WeightedGraph) Dijkstra(source, destination int) (int, []int) {
+func (g *WeightedGraph) Dijkstra(source, destination int) int {
 	distances := map[int]int{}
 	vertexKeys := map[int]struct{}{}
-	routes := map[int]int{}
 	for vertexKey := range g.vertices {
 		distances[vertexKey] = math.MaxInt64
 		vertexKeys[vertexKey] = struct{}{}
@@ -80,18 +79,9 @@ func (g *WeightedGraph) Dijkstra(source, destination int) (int, []int) {
 			totalDistance := distances[leastKey] + distance
 			if totalDistance < distances[key] {
 				distances[key] = totalDistance
-				routes[leastKey] = key
 			}
 		}
 	}
 
-	route := []int{source}
-	for from, to := range routes {
-		if route[len(route)-1] == from {
-			route = append(route, to)
-		} else {
-			route = append(route, from)
-		}
-	}
-	return distances[destination], route
+	return distances[destination]
 }
