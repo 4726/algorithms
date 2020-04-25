@@ -33,3 +33,10 @@ func TestSelectionsort(t *testing.T) {
 	Selectionsort(in)
 	assert.Equal(t, expected, in)
 }
+
+func TestBubblesort(t *testing.T) {
+	in := []int{7, 3, 8, 4, 1, 5, 5}
+	expected := []int{1, 3, 4, 5, 5, 7, 8}
+	Bubblesort(in)
+	assert.Equal(t, expected, in)
+}
