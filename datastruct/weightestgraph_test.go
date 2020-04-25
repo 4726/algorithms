@@ -19,6 +19,7 @@ func TestDijkstra(t *testing.T) {
 	graph.AddEdge(2, 5, 1)
 	graph.AddEdge(3, 4, 2)
 	graph.AddEdge(5, 4, 3)
-	distance := graph.Dijkstra(0, 4)
+	distance, route := graph.Dijkstra(0, 4)
 	assert.Equal(t, 8, distance)
+	assert.Equal(t, []int{0, 2, 5, 4}, route)
 }

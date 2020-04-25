@@ -2,9 +2,6 @@ package datastruct
 
 import "math"
 
-//vertex = node
-//edge = line connecting the nodes
-
 type WeightedGraph struct {
 	vertices map[int]map[int]int
 }
@@ -28,7 +25,7 @@ func (g *WeightedGraph) RemoveVertex(x int) {
 	}
 }
 
-func (g *WeightedGraph) AddEdge(x, y, len int) {
+func (g *WeightedGraph) AddEdge(x, y, weight int) {
 	if _, ok := g.vertices[x]; !ok {
 		return
 	}
@@ -36,8 +33,8 @@ func (g *WeightedGraph) AddEdge(x, y, len int) {
 		return
 	}
 
-	g.vertices[x][y] = len
-	g.vertices[y][x] = len
+	g.vertices[x][y] = weight
+	g.vertices[y][x] = weight
 }
 
 func (g *WeightedGraph) RemoveEdge(x, y int) {
@@ -54,9 +51,10 @@ func (g *WeightedGraph) RemoveEdge(x, y int) {
 	g.RemoveEdge(y, x)
 }
 
-func (g *WeightedGraph) Dijkstra(source, destination int) int {
+func (g *WeightedGraph) Dijkstra(source, destination int) (int, []int) {
 	distances := map[int]int{}
 	vertexKeys := map[int]struct{}{}
+	previous := map[int]int{}
 	for vertexKey := range g.vertices {
 		distances[vertexKey] = math.MaxInt64
 		vertexKeys[vertexKey] = struct{}{}
@@ -79,9 +77,23 @@ func (g *WeightedGraph) Dijkstra(source, destination int) int {
 			totalDistance := distances[leastKey] + distance
 			if totalDistance < distances[key] {
 				distances[key] = totalDistance
+				previous[key] = leastKey
 			}
 		}
 	}
 
-	return distances[destination]
+	var routeRev []int
+	vertexKey := destination
+	for vertexKey != source {
+		routeRev = append(routeRev, vertexKey)
+		prevKey := previous[vertexKey]
+		vertexKey = prevKey
+	}
+	routeRev = append(routeRev, source)
+	var route []int
+	for i := len(routeRev) - 1; i > -1; i-- {
+		route = append(route, routeRev[i])
+	}
+
+	return distances[destination], route
 }
