@@ -13,6 +13,10 @@ func Binarysearch(in []int, value int) int {
 	if value < mid {
 		return Binarysearch(in[:len(in)/2], value)
 	} else {
-		return Binarysearch(in[len(in)/2:], value)
+		res := Binarysearch(in[len(in)/2:], value)
+		if res == -1 {
+			return -1
+		}
+		return res + len(in)/2
 	}
 }
