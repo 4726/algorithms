@@ -52,8 +52,7 @@ func (bst *BinarySearchTree) Exists(v int) bool {
 }
 
 func (bst *BinarySearchTree) Sorted() []int {
-	var res []int
-	return bst.inorderTraversal(bst.root, res)
+	return bst.inorderTraversalIter(bst.root)
 }
 
 func (bst *BinarySearchTree) inorderTraversal(node *BSTNode, res []int) []int {
@@ -80,5 +79,27 @@ func (bst *BinarySearchTree) inorderTraversalRev(node *BSTNode, res []int) []int
 	res = bst.inorderTraversalRev(node.right, res)
 	res = append(res, node.value)
 	res = bst.inorderTraversalRev(node.left, res)
+	return res
+}
+
+func (bst *BinarySearchTree) inorderTraversalIter(node *BSTNode) []int {
+	var res []int
+	var stack []*BSTNode
+	cur := node
+	for {
+		if cur != nil {
+			stack = append(stack, cur)
+			cur = cur.left
+		} else {
+			if len(stack) == 0 {
+				break
+			}
+			node := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			res = append(res, node.value)
+			cur = node.right
+		}
+	}
+
 	return res
 }
